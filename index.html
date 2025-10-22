@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodo - Track your mood, conquer your tasks</title>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded">Skip to main content</a>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Screen reader announcements -->
+    <div id="srAnnouncements" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="header-section">
+            <div class="header-content">
+                <div class="header-text">
+                    <h1 class="app-title">Moodo</h1>
+                    <p class="tagline">mood + todo</p>
+                    <p class="greeting" id="greeting">Good afternoon! Ready to be productive?</p>
+                    <div class="current-date" id="currentDate"></div>
+                </div>
+                <div class="header-controls">
+                    <button id="themeToggle" class="theme-toggle" 
+                            aria-label="Toggle between light and dark theme"
+                            aria-pressed="true"
+                            title="Toggle light/dark theme">
+                        <span class="theme-icon" aria-hidden="true">☀️</span>
+                        <span class="sr-only">Switch to light mode</span>
+                    </button>
+                    <button id="viewToggle" class="view-toggle" 
+                            aria-label="Switch between dashboard and calendar view"
+                            title="Switch view">
+                        <span class="view-icon" aria-hidden="true">📅</span>
+                        <span class="sr-only">Switch to calendar view</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content" role="main">
+            <!-- Progress Dashboard -->
+            <section class="progress-section glass-card">
+                <h2 class="section-title">Today's Progress</h2>
+                <div class="progress-rings">
+                    <div class="progress-ring-container">
+                        <div class="progress-ring" data-ring="tasks">
+                            <svg width="120" height="120">
+                                <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+                                <circle class="ring-progress" cx="60" cy="60" r="50" id="tasksRing"></circle>
+                            </svg>
+                            <div class="ring-content">
+                                <span class="ring-value" id="tasksValue">0</span>
+                                <span class="ring-max">/ 10</span>
+                            </div>
+                        </div>
+                        <div class="ring-label">Daily Tasks</div>
+                    </div>
+                    
+                    <div class="progress-ring-container">
+                        <div class="progress-ring" data-ring="weekly">
+                            <svg width="120" height="120">
+                                <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+                                <circle class="ring-progress" cx="60" cy="60" r="50" id="weeklyRing"></circle>
+                            </svg>
+                            <div class="ring-content">
+                                <span class="ring-value" id="weeklyValue">0</span>
+                                <span class="ring-max">/ 50</span>
+                            </div>
+                        </div>
+                        <div class="ring-label">Weekly Goal</div>
+                    </div>
+                    
+                    <div class="progress-ring-container">
+                        <div class="progress-ring" data-ring="mood">
+                            <svg width="120" height="120">
+                                <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+                                <circle class="ring-progress" cx="60" cy="60" r="50" id="moodRing"></circle>
+                            </svg>
+                            <div class="ring-content">
+                                <span class="ring-value" id="moodValue">0</span>
+                                <span class="ring-max">/ 7d</span>
+                            </div>
+                        </div>
+                        <div class="ring-label">Mood Streak</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- App Views Container -->
+            <div class="views-container">
+                <!-- Dashboard View -->
+                <div id="dashboardView" class="view-content active">
+                    <!-- Mood Tracking Section - Enhanced -->
+                    <section class="mood-section glass-card">
+                        <h2 class="section-title">How are you feeling today?</h2>
+                        
+                        <!-- Mood Logger or Today's Summary -->
+                        <div id="moodLoggerContainer" class="mood-logger-container">
+                            <!-- Mood Selection with Large Buttons -->
+                            <div class="mood-selector">
+                                <div class="mood-options" role="radiogroup" aria-label="Select your mood">
+                                    <button class="mood-btn large" data-mood="1" data-label="Very Sad" data-emoji="😢" data-color="#d46a6a"
+                                            aria-label="Very Sad mood" 
+                                            role="radio" aria-checked="false"
+                                            title="Very Sad">
+                                        <span class="mood-emoji">😢</span>
+                                        <span class="mood-label">Very Sad</span>
+                                    </button>
+                                    <button class="mood-btn large" data-mood="2" data-label="Okay" data-emoji="😐" data-color="#d89a5a"
+                                            aria-label="Okay mood" 
+                                            role="radio" aria-checked="false"
+                                            title="Okay">
+                                        <span class="mood-emoji">😐</span>
+                                        <span class="mood-label">Okay</span>
+                                    </button>
+                                    <button class="mood-btn large" data-mood="3" data-label="Good" data-emoji="😊" data-color="#d4c65a"
+                                            aria-label="Good mood" 
+                                            role="radio" aria-checked="false"
+                                            title="Good">
+                                        <span class="mood-emoji">😊</span>
+                                        <span class="mood-label">Good</span>
+                                    </button>
+                                    <button class="mood-btn large" data-mood="4" data-label="Great" data-emoji="😄" data-color="#6aaa64"
+                                            aria-label="Great mood" 
+                                            role="radio" aria-checked="false"
+                                            title="Great">
+                                        <span class="mood-emoji">😄</span>
+                                        <span class="mood-label">Great</span>
+                                    </button>
+                                    <button class="mood-btn large" data-mood="5" data-label="Excellent" data-emoji="😍" data-color="#5a9fd4"
+                                            aria-label="Excellent mood" 
+                                            role="radio" aria-checked="false"
+                                            title="Excellent">
+                                        <span class="mood-emoji">😍</span>
+                                        <span class="mood-label">Excellent</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Energy Level Slider -->
+                            <div class="energy-control">
+                                <label class="energy-label" for="energySlider">Energy Level</label>
+                                <div class="energy-slider-container">
+                                    <input type="range" id="energySlider" class="energy-slider" 
+                                           min="1" max="10" value="5"
+                                           aria-label="Energy level from 1 to 10"
+                                           aria-describedby="energyValue">
+                                    <span class="energy-value" id="energyValue">5</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                            <!-- Context Tags -->
+                            <div class="context-tags">
+                                <fieldset>
+                                    <legend class="context-label">What's your focus today?</legend>
+                                    <div class="tag-buttons" role="group" aria-label="Focus context tags">
+                                        <button class="tag-btn" data-context="Work" 
+                                                aria-pressed="false"
+                                                aria-label="Work focus tag">
+                                            <span class="tag-emoji">🏢</span> Work
+                                        </button>
+                                        <button class="tag-btn" data-context="Personal" 
+                                                aria-pressed="false"
+                                                aria-label="Personal focus tag">
+                                            <span class="tag-emoji">👤</span> Personal
+                                        </button>
+                                        <button class="tag-btn" data-context="Health" 
+                                                aria-pressed="false"
+                                                aria-label="Health focus tag">
+                                            <span class="tag-emoji">❤️</span> Health
+                                        </button>
+                                        <button class="tag-btn" data-context="Learning" 
+                                                aria-pressed="false"
+                                                aria-label="Learning focus tag">
+                                            <span class="tag-emoji">📚</span> Learning
+                                        </button>
+                                        <button class="tag-btn" data-context="Social" 
+                                                aria-pressed="false"
+                                                aria-label="Social focus tag">
+                                            <span class="tag-emoji">👥</span> Social
+                                        </button>
+                                        <button class="tag-btn" data-context="Family" 
+                                                aria-pressed="false"
+                                                aria-label="Family focus tag">
+                                            <span class="tag-emoji">👨‍👩‍👧</span> Family
+                                        </button>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            
+                            <!-- Feelings Notes -->
+                            <div class="notes-section">
+                                <label for="dailyNotes" class="sr-only">What's on your mind? How are you feeling?</label>
+                                <textarea id="dailyNotes" class="daily-notes" 
+                                          placeholder="What's on your mind? How are you feeling?"
+                                          aria-label="Feelings notes"></textarea>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <div class="mood-submit-section">
+                                <button id="logMoodBtn" class="log-mood-btn" type="button"
+                                        aria-label="Log today's mood and feelings">
+                                    <span class="btn-icon">💭</span>
+                                    <span>Log My Mood</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Today's Mood Summary (shown after logging) -->
+                        <div id="todayMoodSummary" class="today-mood-summary" style="display: none;">
+                            <div class="mood-summary-card">
+                                <div class="mood-display">
+                                    <span id="summaryMoodEmoji" class="summary-emoji">😊</span>
+                                    <div class="mood-info">
+                                        <h3 id="summaryMoodLabel" class="mood-text">Good</h3>
+                                        <p class="mood-details">
+                                            <span id="summaryEnergyLevel">Energy: 7/10</span> • 
+                                            <span id="summaryTime">Logged at 2:30 PM</span>
+                                        </p>
+                                    </div>
+                                    <button id="editTodayMoodBtn" class="edit-mood-btn" 
+                                            aria-label="Edit today's mood entry"
+                                            title="Edit today's mood">✏️</button>
+                                </div>
+                                <div id="summaryContextTags" class="summary-context-tags"></div>
+                                <div id="summaryNotes" class="summary-notes"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Moods Timeline -->
+                        <div class="recent-moods-section">
+                            <h3 class="timeline-title">Recent Mood Entries</h3>
+                            <div id="recentMoodsTimeline" class="moods-timeline">
+                                <!-- Recent mood entries will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Mood Statistics -->
+                        <div class="mood-stats-section">
+                            <h3 class="stats-title">Mood Insights</h3>
+                            <div class="mood-stats-grid">
+                                <div class="stat-card mood-stat">
+                                    <div class="stat-icon">📊</div>
+                                    <div class="stat-content">
+                                        <div class="stat-value" id="avgMoodWeek">3.2</div>
+                                        <div class="stat-label">Avg This Week</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card mood-stat">
+                                    <div class="stat-icon">🎯</div>
+                                    <div class="stat-content">
+                                        <div class="stat-value" id="commonMood">😊</div>
+                                        <div class="stat-label">Most Common</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card mood-stat">
+                                    <div class="stat-icon">🔥</div>
+                                    <div class="stat-content">
+                                        <div class="stat-value" id="moodStreak">3</div>
+                                        <div class="stat-label">Logging Streak</div>
+                                    </div>
+                                </div>
+                                <div class="stat-card mood-stat">
+                                    <div class="stat-icon">⚡</div>
+                                    <div class="stat-content">
+                                        <div class="stat-value" id="avgEnergy">6.8</div>
+                                        <div class="stat-label">Avg Energy</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Task Input Section -->
+                    <section class="input-section glass-card">
+                        <h2 class="section-title">Add New Task</h2>
+                        <form class="task-input-form" role="form" aria-label="Add new task form">
+                            <label for="taskInput" class="sr-only">Task description</label>
+                            <input type="text" id="taskInput" class="task-input" 
+                                   placeholder="What needs to be done?" 
+                                   maxlength="200"
+                                   aria-label="Enter task description"
+                                   required>
+                            <div class="task-controls">
+                                <label for="taskPriority" class="sr-only">Task priority</label>
+                                <select id="taskPriority" class="task-priority" aria-label="Select task priority">
+                                    <option value="Low">Low Priority</option>
+                                    <option value="Medium" selected>Medium Priority</option>
+                                    <option value="High">High Priority</option>
+                                </select>
+                                <label for="taskCategory" class="sr-only">Task category</label>
+                                <select id="taskCategory" class="task-category" aria-label="Select task category">
+                                    <option value="Work">Work</option>
+                                    <option value="Personal">Personal</option>
+                                    <option value="Health">Health</option>
+                                    <option value="Learning">Learning</option>
+                                    <option value="Social">Social</option>
+                                </select>
+                                <label for="estimatedTime" class="sr-only">Estimated time in minutes</label>
+                                <input type="number" id="estimatedTime" class="estimated-time" 
+                                       placeholder="Est. min" min="1" max="480"
+                                       aria-label="Estimated time in minutes">
+                            </div>
+                            <button id="addBtn" class="add-task-btn" type="submit" 
+                                    aria-label="Add new task">
+                                <span class="add-icon">+</span>
+                                <span>Add Task</span>
+                            </button>
+                        </form>
+                    </section>
+
+                    <!-- Tasks Section -->
+                    <section class="tasks-section glass-card">
+                        <div class="section-header">
+                            <h2 class="section-title">Your Tasks</h2>
+                            <div class="filter-buttons" role="tablist" aria-label="Task filter options">
+                                <button class="filter-btn active" data-filter="all" 
+                                        role="tab" aria-selected="true" 
+                                        aria-controls="taskList"
+                                        aria-label="Show all tasks">All</button>
+                                <button class="filter-btn" data-filter="active" 
+                                        role="tab" aria-selected="false" 
+                                        aria-controls="taskList"
+                                        aria-label="Show active tasks">Active</button>
+                                <button class="filter-btn" data-filter="completed" 
+                                        role="tab" aria-selected="false" 
+                                        aria-controls="taskList"
+                                        aria-label="Show completed tasks">Done</button>
+                            </div>
+                        </div>
+                        
+                        <div id="taskList" class="task-list" 
+                             role="tabpanel" aria-label="Task list" 
+                             aria-live="polite">
+                            <!-- Tasks will be inserted here -->
+                        </div>
+                        
+                        <div id="emptyState" class="empty-state" 
+                             role="status" aria-label="No tasks message">
+                            <div class="empty-icon">📝</div>
+                            <p>No tasks yet. Add your first task above!</p>
+                        </div>
+                    </section>
+
+                    <!-- Analytics Section -->
+                    <section class="analytics-section">
+                        <div class="analytics-grid">
+                            <div class="stat-card glass-card">
+                                <div class="stat-icon">✅</div>
+                                <div class="stat-content">
+                                    <div class="stat-value" id="todayCompleted">0</div>
+                                    <div class="stat-label">Completed Today</div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card glass-card">
+                                <div class="stat-icon">⏱️</div>
+                                <div class="stat-content">
+                                    <div class="stat-value" id="timeSpent">0h 0m</div>
+                                    <div class="stat-label">Time Focused</div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card glass-card">
+                                <div class="stat-icon">🔥</div>
+                                <div class="stat-content">
+                                    <div class="stat-value" id="streak">0</div>
+                                    <div class="stat-label">Day Streak</div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card glass-card">
+                                <div class="stat-icon">📊</div>
+                                <div class="stat-content">
+                                    <div class="stat-value" id="weeklyRate">0%</div>
+                                    <div class="stat-label">Weekly Rate</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Calendar View -->
+                <div id="calendarView" class="view-content">
+                    <section class="calendar-section glass-card">
+                        <div class="calendar-header">
+                            <button id="prevMonth" class="nav-btn" 
+                                    aria-label="Go to previous month"
+                                    title="Previous month">‹</button>
+                            <h2 id="calendarTitle" class="calendar-title" 
+                                aria-live="polite" role="heading" aria-level="2">November 2024</h2>
+                            <button id="nextMonth" class="nav-btn" 
+                                    aria-label="Go to next month"
+                                    title="Next month">›</button>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid" 
+                             role="grid" aria-label="Calendar" 
+                             tabindex="0">
+                            <!-- Calendar will be generated here -->
+                        </div>
+                    </section>
+                    
+                    <section class="calendar-tasks glass-card">
+                        <h3 id="selectedDateTitle" role="heading" aria-level="3">Today's Tasks</h3>
+                        <div id="calendarTaskList" class="calendar-task-list" 
+                             role="region" aria-label="Selected date tasks" 
+                             aria-live="polite">
+                            <!-- Selected date tasks will appear here -->
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Task Edit Modal -->
+    <div id="editModal" class="modal" style="display: none;" 
+         role="dialog" aria-modal="true" 
+         aria-labelledby="editModalTitle" 
+         aria-describedby="editModalDesc">
+        <div class="modal-content glass-card">
+            <h3 id="editModalTitle">Edit Task</h3>
+            <p id="editModalDesc" class="sr-only">Edit the task details below and save changes</p>
+            <label for="editInput" class="sr-only">Task text</label>
+            <input type="text" id="editInput" class="edit-input" 
+                   maxlength="200" aria-label="Edit task text" required>
+            <div class="edit-controls">
+                <label for="editPriority" class="sr-only">Edit task priority</label>
+                <select id="editPriority" class="task-priority" 
+                        aria-label="Edit task priority">
+                    <option value="Low">Low Priority</option>
+                    <option value="Medium">Medium Priority</option>
+                    <option value="High">High Priority</option>
+                </select>
+                <label for="editCategory" class="sr-only">Edit task category</label>
+                <select id="editCategory" class="task-category" 
+                        aria-label="Edit task category">
+                    <option value="Work">Work</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Health">Health</option>
+                    <option value="Learning">Learning</option>
+                    <option value="Social">Social</option>
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button id="saveEditBtn" class="btn btn-primary" 
+                        aria-describedby="editModalDesc">Save Changes</button>
+                <button id="cancelEditBtn" class="btn btn-secondary" 
+                        aria-label="Cancel editing and close modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
